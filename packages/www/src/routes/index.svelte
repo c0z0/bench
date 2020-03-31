@@ -1,5 +1,7 @@
 <script>
+  import { onMount } from 'svelte'
   import { fly } from 'svelte/transition'
+  import VanillaTilt from 'vanilla-tilt'
   import { clickOutside } from '../utils/clickOutside.js'
 
   let dropdown = false;
@@ -7,6 +9,24 @@
   const onDropDownClick = () => {
     dropdown = !dropdown
   }
+
+  const onDropDownClickOutside = () => {
+    dropdown = false
+  }
+
+  onMount(() => {
+    const screenshot = document.querySelectorAll(".tilt")
+
+    VanillaTilt.init(screenshot, {
+      max: 15,
+      speed: 400,
+      glare: true,
+      'max-glare': .5,
+      scale: 1.05,
+    });
+
+    return () => screenshot.vanillaTilt.destroy() 
+  })
 
 </script>
 <svelte:head>
@@ -21,9 +41,11 @@
         Meet <img src="logo.svg" alt="logo" class="logo"> 
       </h1>
       <h2>your new workspace</h2>
-      <img src="/screenshot-sm.png" alt="screenshot" class="screenshot-mobile">
+      <div class="tilt img-wrapper-mobile">
+        <img src="/screenshot-sh.png" alt="screenshot" class="screenshot-mobile">
+      </div>
       <p>Bench is a single app that meets all your online communication needs.</p>
-      <button class="download" class:dropdown-open={dropdown} on:click={onDropDownClick} use:clickOutside on:click_outside={onDropDownClick}>
+      <button class="download" class:dropdown-open={dropdown} on:click={onDropDownClick} use:clickOutside on:click_outside={onDropDownClickOutside}>
         <img src="/chevron-down.svg" alt="chevron" class="chevron">Download
         {#if dropdown}
           <div class="dropdown" transition:fly="{{y: -8, duration: 300}}" >
@@ -44,8 +66,8 @@
       </button>
       <a href="https://cserdean.com" class="by">Built by cserdean.com</a>
     </div>
-    <div class="img-wrapper">
-      <img src="/screenshot-sm.png" alt="Screenshot" class="screenshot">
+    <div class="img-wrapper tilt">
+      <img src="/screenshot-sh.png" alt="Screenshot" class="screenshot">
     </div>
   </div>
   <svg viewBox="0 0 100 100" class="sc-kgoBCf iQWuJD"><polygon points="55,0 100,0 100,100 55,100" fill="url(#prefix__paint0_linear)"></polygon><defs><linearGradient id="prefix__paint0_linear" x1="100" y1="100" x2="33" y2="100" gradientUnits="userSpaceOnUse"><stop stop-color="#222"></stop><stop offset="1" stop-color="#111"></stop></linearGradient></defs></svg>
@@ -79,8 +101,14 @@
     margin-bottom: 3rem;
   }
 
+  .tilt {
+    border-radius: .25rem;
+    overflow: hidden;
+  }
+
   .img-wrapper {
     flex: 1.5;
+    margin: .5rem;
   }
 
   .screenshot {
@@ -236,10 +264,15 @@
     }
 
     .screenshot-mobile {
-      max-width: 500px;
-      margin-top: 1rem;
-      width: 80%;
+      width: 100%;
       display: block;
+
+    }
+
+    .img-wrapper-mobile {
+      max-width: 500px;
+      margin: 2rem 0;
+      width: 80%;
     }
   }
 
