@@ -1,6 +1,6 @@
 {
   "name": "bench",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "./src/electron.js",
   "description": "Your new workbench",
   "author": {
