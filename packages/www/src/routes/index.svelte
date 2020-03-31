@@ -1,5 +1,7 @@
 <script>
   import { fly } from 'svelte/transition'
+  import { clickOutside } from '../utils/clickOutside.js'
+
   let dropdown = false;
 
   const onDropDownClick = () => {
@@ -8,6 +10,7 @@
 </script>
 <svelte:head>
 	<title>bench - your new workspace</title>
+  <meta name="description" content="Bench is a single app that meets all your online communication needs.">
 </svelte:head>
 
 <main>
@@ -22,7 +25,7 @@
       <button class="download" class:dropdown-open={dropdown} on:click={onDropDownClick}>
         <img src="/chevron-down.svg" alt="chevron" class="chevron">Download
         {#if dropdown}
-          <div class="dropdown" transition:fly="{{y: -8, duration: 300}}">
+          <div class="dropdown" transition:fly="{{y: -8, duration: 300}}" use:clickOutside on:click_outside={onDropDownClick}>
             <a href="" class="dropdown-item">
               <img src="/apple-logo.svg" alt="apple-logo" class="download-logo">
               for Mac
@@ -104,10 +107,10 @@
   }
 
   .download {
-    color: var(--foreground) !important;
+    color: var(--primary);
     padding: .8rem 0;
     border-radius: .25rem;
-    background: var(--primary);
+    background: var(--background);
     cursor: pointer;
     display: flex;
     width: 10rem;
@@ -116,11 +119,7 @@
     outline: none;
     border: none;
     font-size: 1rem;
-  }
-
-  .dropdown-open {
-    /* border-bottom-left-radius: 0; */
-    /* border-bottom-right-radius: 0; */
+    font-weight: 500;
   }
 
   .dropdown {
