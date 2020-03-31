@@ -1,0 +1,46 @@
+[
+  {
+    "url": "https://messenger.com",
+    "favicon": "messenger.svg"
+  },
+  {
+    "url": "https://outlook.office365.com",
+    "favicon": "outlook.svg"
+  },
+  {
+    "url": "https://slack.com/signin",
+    "favicon": "slack.svg"
+  },
+  {
+    "url": "https://accounts.google.com/AccountChooser?service=mail&continue=https://mail.google.com/mail/",
+    "favicon": "gmail.svg"
+  },
+  {
+    "url": "https://open.spotify.com",
+    "favicon": "spotify.svg"
+  },
+  {
+    "url": "https://discordapp.com/app",
+    "favicon": "discord.svg"
+  },
+  {
+    "url": "https://web.whatsapp.com",
+    "favicon": "whatsapp.svg"
+  },
+  {
+    "url": "https://figma.com",
+    "favicon": "figma.svg"
+  },
+  {
+    "url": "https://messages.android.com",
+    "favicon": "google-messages.svg"
+  },
+  {
+    "url": "https://facebook.com",
+    "favicon": "facebook.svg"
+  },
+  {
+    "url": "https://gem.cserdean.com",
+    "favicon": "gem.svg"
+  }
+]

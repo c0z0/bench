@@ -1,0 +1,67 @@
+<script>
+  export let colors;
+  export let activeColor;
+  export let onColorClick;
+</script>
+
+<main>
+  <img alt="logo" src="icons/logo.svg">
+  <div class="colors">
+    {#each colors as color}
+      <div class="color" style="--color: {color}" class:active={color === activeColor} on:click={() => onColorClick(color)}></div>
+    {/each}
+  </div>
+  <a href="https://cserdean.com" rel="noopener noreferrer" target="_blank">Built by cserdean.com</a>
+</main>
+
+<style>
+  main {
+    background: var(--background);
+    padding: 1rem;
+    min-height: calc(100vh - 2rem);
+
+    display: flex;
+
+    flex-direction: column;
+    align-items: center;
+  }
+
+  img {
+    height: 1.5rem;
+  }
+
+  .colors {
+    margin: 1.5rem 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .color {
+    background: var(--color);
+    content: '';
+    height: 2rem;
+    width: 2rem;
+    border: .25rem solid transparent;
+    cursor: pointer;
+    border-radius: .25rem;
+    margin: .5rem;
+    margin-top: 0;
+  }
+
+  .color.active {
+    border-color: var(--foreground);
+  }
+
+  a {
+    color: var(--foreground) !important;
+    opacity: .5;
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+</style>
