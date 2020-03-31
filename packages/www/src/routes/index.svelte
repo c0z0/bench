@@ -7,6 +7,7 @@
   const onDropDownClick = () => {
     dropdown = !dropdown
   }
+
 </script>
 <svelte:head>
 	<title>bench - your new workspace</title>
@@ -22,11 +23,11 @@
       <h2>your new workspace</h2>
       <img src="/screenshot-sm.png" alt="screenshot" class="screenshot-mobile">
       <p>Bench is a single app that meets all your online communication needs.</p>
-      <button class="download" class:dropdown-open={dropdown} on:click={onDropDownClick}>
+      <button class="download" class:dropdown-open={dropdown} on:click={onDropDownClick} use:clickOutside on:click_outside={onDropDownClick}>
         <img src="/chevron-down.svg" alt="chevron" class="chevron">Download
         {#if dropdown}
-          <div class="dropdown" transition:fly="{{y: -8, duration: 300}}" use:clickOutside on:click_outside={onDropDownClick}>
-            <a href="" class="dropdown-item">
+          <div class="dropdown" transition:fly="{{y: -8, duration: 300}}" >
+            <a href="http://hazel.bench.cserdean.com/download/dmg" class="dropdown-item">
               <img src="/apple-logo.svg" alt="apple-logo" class="download-logo">
               for Mac
             </a>
