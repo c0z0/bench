@@ -8,6 +8,10 @@
     "email": "cosmin@cserdean.com",
     "url": "https://cserdean.com"
   },
+  "repository": {
+    "url": "https://github.com/c0z0/bench.git",
+    "type": "git"
+  },
   "build": {
     "productName": "bench",
     "appId": "com.cserdean.bench",
