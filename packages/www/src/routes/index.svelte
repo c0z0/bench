@@ -3,6 +3,9 @@
   import { fly } from "svelte/transition";
   import VanillaTilt from "vanilla-tilt";
   import { clickOutside } from "../utils/clickOutside.js";
+  import AppleLogo from "../icons/apple.svg";
+  import WindowsLogo from "../icons/windows.svg";
+  import UbuntuLogo from "../icons/ubuntu.svg";
 
   let dropdown = false;
 
@@ -161,11 +164,6 @@
     background: #eee;
   }
 
-  .download-logo {
-    height: 1rem;
-    margin-right: 0.5rem;
-  }
-
   .chevron {
     margin-right: 0.5rem;
     height: 1rem;
@@ -284,24 +282,18 @@
             <a
               href="http://hazel.bench.cserdean.com/download/dmg"
               class="dropdown-item">
-              <img
-                src="/apple-logo.svg"
-                alt="apple-logo"
-                class="download-logo" />
+              <AppleLogo height="16px" width="24px" />
               for Mac
             </a>
             <a
               href="http://hazel.bench.cserdean.com/download/exe"
               class="dropdown-item">
-              <img
-                src="/windows-logo.svg"
-                alt="windows-logo"
-                class="download-logo" />
+              <WindowsLogo height="16px" width="24px" />
               for Windows
             </a>
             <!--
             <a href="" class="dropdown-item">
-              <img src="/ubuntu-logo.svg" alt="ubuntu-logo" class="download-logo">
+              <UbuntuLogo height="16px" width="24px" />
               for Ubuntu
             </a>
             !-->
