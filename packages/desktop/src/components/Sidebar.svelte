@@ -1,11 +1,11 @@
 <script>
-  import { fly } from 'svelte/transition'
+  import { fly } from "svelte/transition";
 
-  import SidebarItem from './SidebarItem.svelte'
-  import SidebarItemPlaceholder from './SidebarItemPlaceholder.svelte'
-  import CreateButton from './CreateButton.svelte'
+  import SidebarItem from "./SidebarItem.svelte";
+  import SidebarItemPlaceholder from "./SidebarItemPlaceholder.svelte";
+  import CreateButton from "./CreateButton.svelte";
 
-  export let activeId
+  export let activeId;
   export let urls;
   export let urlsLoading;
   export let onClick;
@@ -13,7 +13,7 @@
   export let createActive;
   export let onReorder;
   export let onDelete;
-  
+
   let dragging = null;
   let draggedOverTrash = false;
 
@@ -29,7 +29,7 @@
   const onDragOver = (e, i) => {
     e.preventDefault();
 
-    const overItem = urls[i]
+    const overItem = urls[i];
     if (overItem.id === dragging) return;
 
     onReorder(dragging, i);
@@ -46,25 +46,6 @@
   };
 </script>
 
-<div class="wrapper">
-  <div class="apps">
-    {#each urls as url, i}
-      <SidebarItem {...url} active={url.id === activeId} onClick={() => onClick(url.id)} onDragStart={(e) => onDragStart(e, url.id)} onDragEnd={() => onDragEnd()} onDragOver={(e) => onDragOver(e, i)}/>
-    {/each}
-    {#if urlsLoading}
-      <SidebarItemPlaceholder />
-    {/if}
-  </div>
-    <div>
-      {#if dragging}
-        <div class="delete" class:highlight={draggedOverTrash} on:dragover={onDraggedOverTrash} on:dragleave={onTrashLeave} transition:fly="{{y: 16, duration: 500}}" on:drop={() => onDelete(dragging) || onTrashLeave() || onDragEnd()} >
-          <img src="icons/trash.svg" alt="trash-icon">
-        </div>
-      {/if}
-      <CreateButton onClick={onCreateClick} active={createActive}/>
-    </div>
-</div>
-
 <style>
   .wrapper {
     width: 100%;
@@ -78,7 +59,7 @@
   }
 
   .apps {
-    overflow-y: scroll;
+    overflow-y: hidden;
     flex: 1;
   }
 
@@ -96,4 +77,39 @@
   .delete.highlight {
     background: var(--delete-highlight-background);
   }
+
+  *::-webkit-scrollbar {
+    display: none;
+  }
 </style>
+
+<div class="wrapper">
+  <div class="apps">
+    {#each urls as url, i}
+      <SidebarItem
+        {...url}
+        active={url.id === activeId}
+        onClick={() => onClick(url.id)}
+        onDragStart={e => onDragStart(e, url.id)}
+        onDragEnd={() => onDragEnd()}
+        onDragOver={e => onDragOver(e, i)} />
+    {/each}
+    {#if urlsLoading}
+      <SidebarItemPlaceholder />
+    {/if}
+  </div>
+  <div>
+    {#if dragging}
+      <div
+        class="delete"
+        class:highlight={draggedOverTrash}
+        on:dragover={onDraggedOverTrash}
+        on:dragleave={onTrashLeave}
+        transition:fly={{ y: 16, duration: 500 }}
+        on:drop={() => onDelete(dragging) || onTrashLeave() || onDragEnd()}>
+        <img src="icons/trash.svg" alt="trash-icon" />
+      </div>
+    {/if}
+    <CreateButton onClick={onCreateClick} active={createActive} />
+  </div>
+</div>

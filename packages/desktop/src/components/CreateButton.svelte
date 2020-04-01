@@ -3,8 +3,6 @@
   export let active;
 </script>
 
-<button on:click={onClick} class={active ? 'active' : ''}><img alt="add-icon" src="icons/plus.svg" draggable="false"></button>
-
 <style>
   button {
     /* padding: 0 1rem; */
@@ -21,6 +19,7 @@
     justify-content: center;
     height: 4rem;
     cursor: pointer;
+    -webkit-app-region: no-drag;
   }
 
   button:hover {
@@ -33,15 +32,19 @@
 
   img {
     background: var(--content-background);
-    opacity: .66;
-    padding: .25rem;
+    opacity: 0.66;
+    padding: 0.25rem;
     width: 1.75rem;
     height: 1.75rem;
     /* margin-right: 1rem; */
-    border-radius: .25rem;
+    border-radius: 0.25rem;
   }
 
   button.active img {
     background: none;
   }
 </style>
+
+<button on:click={onClick} class={active ? 'active' : ''}>
+  <img alt="add-icon" src="icons/plus.svg" draggable="false" />
+</button>
