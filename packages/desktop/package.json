@@ -21,6 +21,9 @@
       "extendInfo": {
         "LSUIElement": 1
       }
+    },
+    "win": {
+      "icon": "icons/icon.ico"
     }
   },
   "scripts": {
