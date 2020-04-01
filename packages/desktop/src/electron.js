@@ -261,7 +261,12 @@ function createWindow() {
     });
   }
 
-  console.log(app.getPath('userData'));
+  mainWindow.on('maximize', () => mainWindow.webContents.send('max'));
+  mainWindow.on('unmaximize', () => mainWindow.webContents.send('max'));
+}
+
+if (!WINDOWS) {
+  app.dock.show();
 }
 
 app.on('ready', createWindow);

@@ -8,22 +8,24 @@
   export let windows;
   const win = remote.getCurrentWindow();
 
-  let maximized = false;
+  let maximized = win.isMaximized();
 
   const onRefresh = () => ipc.send("refresh", activeId);
   const onForward = () => ipc.send("forward", activeId);
   const onBackward = () => ipc.send("backward", activeId);
   const onAbout = () => ipc.send("about");
 
-  $: disabled = activeId === null;
-
   const onToggleMaximize = () => {
-    maximized = !maximized;
+    maximized = win.isMaximized();
   };
 
+  ipc.on("max", onToggleMaximize);
+
+  $: disabled = activeId === null;
+
   const onMin = () => win.minimize();
-  const onMax = () => win.maximize() || onToggleMaximize();
-  const onUnmax = () => win.unmaximize() || onToggleMaximize();
+  const onMax = () => win.maximize();
+  const onUnmax = () => win.unmaximize();
   const onClose = () => win.close();
 </script>
 
