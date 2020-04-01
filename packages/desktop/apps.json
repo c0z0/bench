@@ -24,6 +24,10 @@
     "favicon": "whatsapp.svg"
   },
   {
+    "url": "https://web.telegram.org/#/login",
+    "favicon": "telegram.svg"
+  },
+  {
     "url": "https://messages.android.com",
     "favicon": "google-messages.svg"
   },
