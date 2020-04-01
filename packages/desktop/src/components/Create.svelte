@@ -21,7 +21,6 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    -webkit-app-region: drag;
   }
 
   .predefined {
@@ -59,12 +58,10 @@
     outline: none;
     color: var(--foreground);
     border-radius: 0.5rem;
-    -webkit-app-region: no-drag;
   }
 
   input#url {
     width: calc(100% - 4rem);
-    -webkit-app-region: no-drag;
   }
 
   input#submit {

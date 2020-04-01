@@ -52,7 +52,6 @@
     height: 100%;
     background: var(--background);
     border-right: var(--border-color) 1px solid;
-    -webkit-app-region: drag;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
