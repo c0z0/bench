@@ -1,5 +1,5 @@
 <script>
-  import CreateItem from './CreateItem.svelte'
+  import CreateItem from "./CreateItem.svelte";
 
   export let onCreate;
   export let predefinedApps;
@@ -10,22 +10,7 @@
     e.preventDefault();
     onCreate({ url });
   };
-
 </script>
-
-<div class="wrapper">
-  <h2>Add an app</h2> 
-  <div class="predefined">
-    {#each predefinedApps as p}
-      <CreateItem favicon={p.favicon} onClick={() => onCreate(p)}/>
-    {/each}
-  </div>
-  <form on:submit={onSubmit}>
-    <h4>Or bring your own: </h4>
-    <input type="url" id="url" placeholder="Enter a URL..." autofocus bind:value={url} required>
-    <input type="submit" id="submit" />
-  </form>
-</div>
 
 <style>
   .wrapper {
@@ -73,7 +58,8 @@
     border: none;
     outline: none;
     color: var(--foreground);
-    border-radius: .5rem;
+    border-radius: 0.5rem;
+    -webkit-app-region: no-drag;
   }
 
   input#url {
@@ -86,3 +72,23 @@
     cursor: pointer;
   }
 </style>
+
+<div class="wrapper">
+  <h2>Add an app</h2>
+  <div class="predefined">
+    {#each predefinedApps as p}
+      <CreateItem favicon={p.favicon} onClick={() => onCreate(p)} />
+    {/each}
+  </div>
+  <form on:submit={onSubmit}>
+    <h4>Or bring your own:</h4>
+    <input
+      type="url"
+      id="url"
+      placeholder="Enter a URL..."
+      autofocus
+      bind:value={url}
+      required />
+    <input type="submit" id="submit" />
+  </form>
+</div>

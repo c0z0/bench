@@ -40,6 +40,7 @@
 
 <button on:click={onClick} {disabled}>
   <img
+    draggable="false"
     src="icons/{icon}.svg"
     alt="icon"
     class={icon === 'b-logo' ? 'logo' : ''} />
