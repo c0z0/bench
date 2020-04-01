@@ -19,10 +19,17 @@ const PRED_APPS = require('../apps.json');
 const SIDEBAR_WIDTH = 70;
 const TITLEBAR_HEIGHT = 37;
 const WIDE_TITLEBAR = true;
+const WINDOWS = process.platform !== 'darwin';
 const USER_AGENT =
   'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36';
 
-global.CONSTS = { SIDEBAR_WIDTH, TITLEBAR_HEIGHT, WIDE_TITLEBAR, PRED_APPS };
+global.CONSTS = {
+  SIDEBAR_WIDTH,
+  TITLEBAR_HEIGHT,
+  WIDE_TITLEBAR,
+  PRED_APPS,
+  WINDOWS,
+};
 
 let mainWindow;
 let aboutWindow;
@@ -211,6 +218,7 @@ function createWindow() {
     height: 840,
     titleBarStyle: 'hiddenInset',
     backgroundColor: '#333333',
+    frame: false,
     webPreferences: {
       nodeIntegration: true,
     },
