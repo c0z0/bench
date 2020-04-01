@@ -10,9 +10,6 @@ const path = require('path');
 const uniqid = require('uniqid');
 const Store = require('electron-store');
 const urlModule = require('url');
-const widevine = require('electron-widevinecdm');
-
-widevine.load(app);
 
 const store = new Store();
 
