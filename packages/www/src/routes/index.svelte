@@ -291,12 +291,12 @@
               <WindowsLogo height="16px" width="24px" />
               for Windows
             </a>
-            <!--
-            <a href="" class="dropdown-item">
+            <a
+              href="http://hazel.bench.cserdean.com/download/deb"
+              class="dropdown-item">
               <UbuntuLogo height="16px" width="24px" />
               for Ubuntu
             </a>
-            !-->
           </div>
         {/if}
       </button>
