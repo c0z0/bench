@@ -22,7 +22,8 @@
       speed: 400,
       glare: true,
       "max-glare": 0.5,
-      scale: 1.05
+      scale: 1.05,
+      startX: 10
     });
 
     return () => screenshot.vanillaTilt.destroy();
@@ -60,6 +61,7 @@
   .tilt {
     border-radius: 0.25rem;
     overflow: hidden;
+    position: relative;
   }
 
   .img-wrapper {
@@ -68,7 +70,8 @@
   }
 
   .screenshot {
-    max-width: 100%;
+    width: 100%;
+    margin-bottom: -4px; /* argh */
   }
 
   .logo {
