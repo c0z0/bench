@@ -269,7 +269,10 @@ if (!WINDOWS) {
   app.dock.show();
 }
 
-app.on('ready', createWindow);
+app.on('ready', () => {
+  createWindow();
+  require('./lib/checkUpdate')(mainWindow);
+});
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
