@@ -1,6 +1,8 @@
 <script>
-  import TitleButton from "./TitleButton.svelte";
   const { ipcRenderer: ipc, remote } = require("electron");
+
+  import TitleButton from "./TitleButton.svelte";
+  import BLogo from "../icons/blogo.svg";
 
   export let activeId;
   export let windows;
@@ -126,7 +128,9 @@
 
 <div class="wrapper" class:windows>
   <div>
-    <TitleButton icon="b-logo" onClick={onAbout} />
+    <TitleButton onClick={onAbout}>
+      <BLogo height="16px" width="16px" />
+    </TitleButton>
     <TitleButton {disabled} onClick={onBackward} icon="arrow-left" />
     <TitleButton {disabled} onClick={onForward} icon="arrow-right" />
     <TitleButton {disabled} onClick={onRefresh} icon="refresh" />

@@ -16,6 +16,7 @@
     user-select: none;
     border-radius: 2px;
     -webkit-app-region: no-drag;
+    color: var(--primary);
   }
 
   button:not(:disabled):hover {
@@ -39,9 +40,13 @@
 </style>
 
 <button on:click={onClick} {disabled}>
-  <img
-    draggable="false"
-    src="icons/{icon}.svg"
-    alt="icon"
-    class={icon === 'b-logo' ? 'logo' : ''} />
+  {#if icon}
+    <img
+      draggable="false"
+      src="icons/{icon}.svg"
+      alt="icon"
+      class={icon === 'b-logo' ? 'logo' : ''} />
+  {:else}
+    <slot />
+  {/if}
 </button>
