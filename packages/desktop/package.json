@@ -1,6 +1,6 @@
 {
   "name": "bench",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "main": "./src/electron.js",
   "description": "Your new workbench",
   "author": {
@@ -55,6 +55,7 @@
   },
   "dependencies": {
     "electron-dl": "^3.0.0",
+    "electron-log": "^4.1.1",
     "electron-store": "^5.1.1",
     "node-fetch": "^2.6.0",
     "sirv-cli": "^0.4.4",
