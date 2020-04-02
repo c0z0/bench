@@ -38,5 +38,10 @@
   {
     "url": "https://gem.cserdean.com",
     "favicon": "gem.svg"
+  },
+    {
+    "url": "https://www.notion.so/login",
+    "favicon": "notion.svg"
   }
+
 ]
