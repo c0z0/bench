@@ -12,7 +12,7 @@
     "favicon": "slack.svg"
   },
   {
-    "url": "https://accounts.google.com/AccountChooser?service=mail&continue=https://mail.google.com/mail/",
+    "url": "https://google.com/mail",
     "favicon": "gmail.svg"
   },
   {
@@ -39,9 +39,8 @@
     "url": "https://gem.cserdean.com",
     "favicon": "gem.svg"
   },
-    {
+  {
     "url": "https://www.notion.so/login",
     "favicon": "notion.svg"
   }
-
 ]
