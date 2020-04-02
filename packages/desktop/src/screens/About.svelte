@@ -1,5 +1,8 @@
 <script>
   import Logo from "../icons/logo.svg";
+  const { remote } = require("electron");
+
+  const { VERSION } = remote.getGlobal("CONSTS");
 
   export let colors;
   export let activeColor;
@@ -19,12 +22,8 @@
     color: var(--primary);
   }
 
-  img {
-    height: 1.5rem;
-  }
-
   .colors {
-    margin: 1.5rem 0;
+    margin-top: 1.5rem;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -48,10 +47,16 @@
     border-color: var(--foreground);
   }
 
-  a {
+  a,
+  p {
     color: var(--foreground) !important;
     opacity: 0.5;
     text-decoration: none;
+    margin: 0.25rem 0;
+  }
+
+  p {
+    opacity: 0.25;
   }
 
   a:hover {
@@ -73,4 +78,5 @@
   <a href="https://cserdean.com" rel="noopener noreferrer" target="_blank">
     Built by cserdean.com
   </a>
+  <p>Version {VERSION}</p>
 </main>

@@ -17,6 +17,7 @@ const PRED_APPS = require('../apps.json');
 // const SIDEBAR_WIDTH = 200;
 // const TITLEBAR_HEIGHT = 37;
 const SIDEBAR_WIDTH = 70;
+const VERSION = app.getVersion();
 const TITLEBAR_HEIGHT = 37;
 const WIDE_TITLEBAR = true;
 const WINDOWS = process.platform !== 'darwin';
@@ -29,6 +30,7 @@ global.CONSTS = {
   WIDE_TITLEBAR,
   PRED_APPS,
   WINDOWS,
+  VERSION,
 };
 
 let mainWindow;
