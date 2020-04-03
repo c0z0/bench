@@ -1,7 +1,9 @@
 <script>
-  export let icon;
-  export let onClick;
+  import { fly } from "svelte/transition";
+  export let onClick = () => {};
   export let disabled = false;
+  export let label = "";
+  export let primary;
 </script>
 
 <style>
@@ -16,37 +18,33 @@
     user-select: none;
     border-radius: 2px;
     -webkit-app-region: no-drag;
+    color: var(--icon-foreground);
+    display: inline-flex;
+    align-items: center;
+  }
+
+  button.primary {
     color: var(--primary);
+  }
+
+  span {
+    color: var(--foreground);
+    margin-left: 0.5rem;
+    font-size: 0.75rem;
   }
 
   button:not(:disabled):hover {
     background: var(--background);
   }
-
-  img {
-    opacity: 0.75;
-    height: 1rem;
-    width: 1rem;
-    cursor: pointer;
-  }
-
-  img.logo {
-    opacity: 1;
-  }
-
-  button:disabled img {
-    opacity: 0.25;
-  }
 </style>
 
-<button on:click={onClick} {disabled}>
-  {#if icon}
-    <img
-      draggable="false"
-      src="icons/{icon}.svg"
-      alt="icon"
-      class={icon === 'b-logo' ? 'logo' : ''} />
-  {:else}
-    <slot />
+<button
+  on:click={onClick}
+  {disabled}
+  transition:fly={{ x: 4, duration: 200 }}
+  class:primary>
+  <slot />
+  {#if label}
+    <span>{label}</span>
   {/if}
 </button>

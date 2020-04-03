@@ -90,6 +90,8 @@
   #sidebar {
     grid-column: 1 / span 1;
     grid-row: 2 / span 1;
+    overflow-y: hidden;
+    height: 100%;
   }
 
   #titlebar {
@@ -98,7 +100,7 @@
   }
 
   #placeholder {
-    background: white;
+    background: var(--content-background);
     grid-column: 2 / span 1;
     grid-row: 2 / span 1;
   }
@@ -123,13 +125,12 @@
       windows={WINDOWS} />
   </div>
   <div id="placeholder">
-    {#if urls.length === 0 && activeId !== ADD_ID}
-      <PagePlaceholder />
-    {/if}
     {#if activeId === ADD_ID}
       <Create
         {onCreate}
         predefinedApps={PRED_APPS.filter(a => !urls.find(u => u.url === a.url))} />
+    {:else}
+      <PagePlaceholder activeUrl={urls.find(u => u.id === activeId)} />
     {/if}
   </div>
 </main>

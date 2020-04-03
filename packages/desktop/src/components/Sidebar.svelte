@@ -49,17 +49,19 @@
 <style>
   .wrapper {
     width: 100%;
-    height: 100%;
+    height: calc(100% - 4rem);
     background: var(--background);
     border-right: var(--border-color) 1px solid;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    position: relative;
+    padding-bottom: 4rem;
+    overflow-y: hidden;
+    transition: padding-bottom 0.2s;
   }
 
   .apps {
-    overflow-y: hidden;
-    flex: 1;
+    height: 100%;
+    overflow-y: scroll;
+    z-index: 1;
   }
 
   .delete {
@@ -71,6 +73,11 @@
     align-items: center;
     justify-content: center;
     height: 4rem;
+    z-index: 2;
+    position: absolute;
+    bottom: 4rem;
+    left: 0;
+    right: 0;
   }
 
   .delete.highlight {
@@ -82,7 +89,7 @@
   }
 </style>
 
-<div class="wrapper">
+<div class="wrapper" class:dragging>
   <div class="apps">
     {#each urls as url, i}
       <SidebarItem
@@ -97,18 +104,16 @@
       <SidebarItemPlaceholder />
     {/if}
   </div>
-  <div>
-    {#if dragging}
-      <div
-        class="delete"
-        class:highlight={draggedOverTrash}
-        on:dragover={onDraggedOverTrash}
-        on:dragleave={onTrashLeave}
-        transition:fly={{ y: 16, duration: 500 }}
-        on:drop={() => onDelete(dragging) || onTrashLeave() || onDragEnd()}>
-        <img src="icons/trash.svg" alt="trash-icon" />
-      </div>
-    {/if}
-    <CreateButton onClick={onCreateClick} active={createActive} />
-  </div>
+  {#if dragging}
+    <div
+      class="delete"
+      class:highlight={draggedOverTrash}
+      on:dragover={onDraggedOverTrash}
+      on:dragleave={onTrashLeave}
+      transition:fly={{ y: 16, duration: 500 }}
+      on:drop={() => onDelete(dragging) || onTrashLeave() || onDragEnd()}>
+      <img src="icons/trash.svg" alt="trash-icon" />
+    </div>
+  {/if}
+  <CreateButton onClick={onCreateClick} active={createActive} />
 </div>

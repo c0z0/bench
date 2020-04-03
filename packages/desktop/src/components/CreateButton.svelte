@@ -1,4 +1,6 @@
 <script>
+  import Plus from "../icons/plus.svg";
+
   export let onClick;
   export let active;
 </script>
@@ -7,7 +9,7 @@
   button {
     /* padding: 0 1rem; */
     width: 100%;
-    background: none;
+    background: var(--background);
     color: var(--foreground);
     border: none;
     border-top: 1px solid var(--border-color);
@@ -20,6 +22,11 @@
     height: 4rem;
     cursor: pointer;
     -webkit-app-region: no-drag;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 3;
   }
 
   button:hover {
@@ -30,21 +37,24 @@
     background: var(--primary);
   }
 
-  img {
+  .img {
     background: var(--content-background);
-    opacity: 0.66;
     padding: 0.25rem;
     width: 1.75rem;
     height: 1.75rem;
     /* margin-right: 1rem; */
     border-radius: 0.25rem;
+    color: var(--icon-foreground);
   }
 
-  button.active img {
+  button.active .img {
     background: none;
+    color: #fffa;
   }
 </style>
 
 <button on:click={onClick} class={active ? 'active' : ''}>
-  <img alt="add-icon" src="icons/plus.svg" draggable="false" />
+  <div class="img">
+    <Plus height="100%" width="100%" />
+  </div>
 </button>

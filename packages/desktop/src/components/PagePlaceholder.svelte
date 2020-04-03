@@ -1,7 +1,6 @@
-<main>
-  <h2>🤷  No apps...</h2> 
-  <h5>Add an app from the sidebar</h5>
-</main>
+<script>
+  export let activeUrl;
+</script>
 
 <style>
   main {
@@ -12,7 +11,6 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    -webkit-app-region: drag;
   }
 
   h5 {
@@ -20,3 +18,10 @@
     color: var(--foreground-secondary);
   }
 </style>
+
+<main>
+  {#if !activeUrl}
+    <h2>🤷 No apps...</h2>
+    <h5>Add an app from the sidebar</h5>
+  {/if}
+</main>

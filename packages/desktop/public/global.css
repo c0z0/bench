@@ -1,13 +1,15 @@
 html {
   font-size: 16px;
 }
+
 body {
   margin: 0;
   padding: 0;
   font-size: 16px;
-  font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI',
-    Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-    'Segoe UI Symbol';
+  font-family: "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol";
+
 
   --background: #222222;
   --foreground: #ffffff;
@@ -18,8 +20,35 @@ body {
   --border-color: #484848;
   --delete-background: #331f1f;
   --delete-highlight-background: #582b2b;
+  --window-button-filter: none;
+  --window-button-background-hover: rgba(255, 255, 255, 0.1);
+  --window-button-background-active: rgba(255, 255, 255, 0.2);
+  --icon-filter: 100%;
+  --icon-foreground: #fffa;
 
   color: var(--foreground);
+  background: var(--content-background);
+}
+
+.lightmode {
+  --background: white;
+  --content-background: #f7f6f4;
+  --content-background: #eeedec;
+  --foreground: #484848;
+  --border-color: #dadada;
+  --delete-background: var(--content-background);
+  --delete-highlight-background: #f7dddd;
+  --window-button-background-hover: rgba(0, 0, 0, 0.1);
+  --window-button-background-active: rgba(0, 0, 0, 0.2);
+  --icon-filter: 28%;
+  --icon-foreground: var(--foreground);
+
+  color: var(--foreground);
+  background: var(--content-background);
+}
+
+svg .foreground {
+  fill: var(--foreground);
 }
 
 h1 {

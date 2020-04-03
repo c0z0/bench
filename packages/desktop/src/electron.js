@@ -1,15 +1,15 @@
 const {
   app,
   BrowserWindow,
-  BrowserView,
   ipcMain: ipc,
   session,
   screen,
+  systemPreferences,
 } = require('electron');
 const path = require('path');
-const uniqid = require('uniqid');
 const Store = require('electron-store');
-const urlModule = require('url');
+
+const Apps = require('./lib/apps');
 
 const store = new Store();
 
@@ -23,6 +23,13 @@ const WIDE_TITLEBAR = true;
 const WINDOWS = process.platform !== 'darwin';
 const USER_AGENT =
   'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36';
+const SYSTEM_COLOR =
+  process.platform !== 'linux'
+    ? `#${systemPreferences.getAccentColor().slice(0, 6)}`
+    : false;
+
+const STARTUP =
+  process.platform !== 'linux' ? app.getLoginItemSettings().openAtLogin : false;
 
 global.CONSTS = {
   SIDEBAR_WIDTH,
@@ -31,6 +38,9 @@ global.CONSTS = {
   PRED_APPS,
   WINDOWS,
   VERSION,
+  SYSTEM_COLOR,
+  MUTED: store.get(Apps.MUTE_KEY) || 'on',
+  STARTUP,
 };
 
 let mainWindow;
@@ -38,124 +48,9 @@ let aboutWindow;
 let watcher;
 let apps;
 
-class Apps {
-  STORE_KEY = 'urls';
-
-  constructor(win) {
-    this.win = win;
-    this.views = [];
-    this.focusedViewId = null;
-
-    const urls = this.getApps();
-
-    urls.forEach(({ url, id }) => this.createView(url, id));
-
-    if (this.views.length) {
-      this.focusView(this.views[0].id);
-    }
-  }
-
-  getApps() {
-    return store.get(this.STORE_KEY) || [];
-  }
-
-  addApp({ url, favicon }) {
-    const urls = this.getApps();
-
-    const id = uniqid();
-
-    urls.push({ url, id, title: urlModule.parse(url).hostname, favicon });
-
-    store.set(this.STORE_KEY, urls);
-
-    this.createView(url, id);
-    this.focusView(id);
-
-    this.win.webContents.send('app-created', apps.getApps());
-  }
-
-  createView(url, id) {
-    const view = new BrowserView({ webPreferences: { plugins: true } });
-    view.webContents.loadURL(url, { userAgent: USER_AGENT });
-
-    const handleRedirect = (e, rUrl) => {
-      const appHost = new URL(url).href;
-      const urlHost = new URL(rUrl).href;
-
-      if (!urlHost.includes(appHost)) {
-        e.preventDefault();
-        require('electron').shell.openExternal(rUrl);
-      }
-    };
-
-    // view.webContents.on('will-navigate', handleRedirect);
-    view.webContents.on('new-window', handleRedirect);
-    this.views.push({ view, id });
-  }
-
-  focusView(id) {
-    const { view } = this.getView(id);
-
-    this.win.setBrowserView(view);
-
-    const [width, height] = this.win.getSize();
-
-    const xOffset = SIDEBAR_WIDTH;
-    const yOffset = WIDE_TITLEBAR ? TITLEBAR_HEIGHT : 0;
-
-    view.setBounds({
-      x: SIDEBAR_WIDTH,
-      y: yOffset,
-      width: width - xOffset,
-      height: height - yOffset,
-    });
-    view.setAutoResize({ width: true, height: true });
-
-    this.focusedViewId = id;
-
-    // view.webContents.openDevTools({ mode: 'detach' });
-  }
-
-  hideView() {
-    if (this.focusedViewId === null) return;
-
-    this.win.removeBrowserView(this.getView(this.focusedViewId).view);
-
-    this.focusedViewId = null;
-  }
-
-  getView(id) {
-    return this.views.find(v => v.id === id);
-  }
-
-  refresh(id) {
-    const { view } = this.getView(id);
-
-    view.webContents.reload();
-  }
-
-  forward(id) {
-    const { view } = this.getView(id);
-
-    if (view.webContents.canGoForward()) view.webContents.goForward();
-  }
-
-  backward(id) {
-    const { view } = this.getView(id);
-
-    if (view.webContents.canGoBack()) view.webContents.goBack();
-  }
-
-  updateApps(apps) {
-    this.urls = apps;
-
-    store.set(this.STORE_KEY, apps);
-  }
-}
-
 const ABOUT_SIZE = {
   width: 300,
-  height: 230,
+  height: 500,
 };
 
 function createAbout() {
@@ -166,6 +61,7 @@ function createAbout() {
     frame: false,
     movable: false,
     resizable: false,
+    useContentSize: true,
     show: false,
     webPreferences: {
       nodeIntegration: true,
@@ -213,11 +109,11 @@ function createWindow() {
   });
   const mode = process.env.NODE_ENV;
 
-  createAbout();
-
   mainWindow = new BrowserWindow({
     width: 1300,
     height: 840,
+    minWidth: 800,
+    minHeight: 800,
     titleBarStyle: 'hiddenInset',
     backgroundColor: '#333333',
     frame: false,
@@ -226,7 +122,7 @@ function createWindow() {
     },
   });
 
-  apps = new Apps(mainWindow);
+  apps = new Apps(mainWindow, store, global.CONSTS);
 
   mainWindow.loadURL(`file://${path.join(__dirname, '../public/index.html')}`);
 
@@ -248,6 +144,10 @@ function createWindow() {
   ipc.on('update-theme', (e, theme) =>
     mainWindow.webContents.send('update-theme', theme),
   );
+  ipc.on('startup', (e, openAtLogin) =>
+    app.setLoginItemSettings({ openAtLogin }),
+  );
+  ipc.on('mute', (e, muted) => apps.changeMute(muted));
 
   mainWindow.webContents.on('dom-ready', () => {
     mainWindow.webContents.send('update-apps', apps.getApps());
@@ -265,6 +165,18 @@ function createWindow() {
 
   mainWindow.on('maximize', () => mainWindow.webContents.send('max'));
   mainWindow.on('unmaximize', () => mainWindow.webContents.send('max'));
+
+  mainWindow.on('blur', () => apps.changeMute());
+  mainWindow.on('focus', () => apps.changeMute());
+  aboutWindow.on('blur', () => apps.changeMute());
+  aboutWindow.on('focus', () => apps.changeMute());
+
+  mainWindow.on('close', () => {
+    ipc.removeAllListeners();
+    aboutWindow.removeAllListeners();
+    apps.close();
+    aboutWindow.close();
+  });
 }
 
 if (!WINDOWS) {
@@ -272,6 +184,7 @@ if (!WINDOWS) {
 }
 
 app.on('ready', () => {
+  createAbout();
   createWindow();
   require('./lib/checkUpdate')(mainWindow);
 });
@@ -284,6 +197,7 @@ app.on('window-all-closed', () => {
 
 app.on('activate', () => {
   if (mainWindow === null) {
+    createAbout();
     createWindow();
   }
 });

@@ -67,6 +67,7 @@
   input#submit {
     background: var(--primary);
     cursor: pointer;
+    color: white;
   }
 </style>
 
