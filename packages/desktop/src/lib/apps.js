@@ -156,6 +156,17 @@ module.exports = class Apps {
   updateApps(apps) {
     this.urls = apps;
 
+    this.views = this.views
+      .map(v => {
+        if (!apps.find(a => a.id === v.id)) {
+          v.view.destroy();
+          return null;
+        }
+
+        return v;
+      })
+      .filter(v => v !== null);
+
     this.store.set(this.STORE_KEY, apps);
   }
 
