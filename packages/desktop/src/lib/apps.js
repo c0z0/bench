@@ -74,9 +74,20 @@ module.exports = class Apps {
     this.win.webContents.send('app-created', this.getApps());
   }
 
+  updateUrl(id) {
+    return (_, url) => {
+      const urls = this.getApps().map(u => (u.id === id ? { ...u, url } : u));
+      this.store.set(this.STORE_KEY, urls);
+    };
+  }
+
   createView(url, id) {
     const view = new BrowserView({
-      webPreferences: { plugins: true },
+      webPreferences: {
+        plugins: true,
+        partition: `persist:${id}`,
+        userAgent: this.consts.USER_AGENT,
+      },
       backgroundColor: '#333',
     });
 
@@ -92,7 +103,7 @@ module.exports = class Apps {
       }
     };
 
-    // view.webContents.on('will-navigate', handleRedirect);
+    view.webContents.on('did-navigate', this.updateUrl(id));
     view.webContents.on('new-window', handleRedirect);
 
     this.views.push({ view, id });

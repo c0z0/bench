@@ -8,6 +8,7 @@ const {
 } = require('electron');
 const path = require('path');
 const Store = require('electron-store');
+const log = require('electron-log');
 
 const Apps = require('./lib/apps');
 
@@ -21,8 +22,6 @@ const VERSION = app.getVersion();
 const TITLEBAR_HEIGHT = 37;
 const WIDE_TITLEBAR = true;
 const WINDOWS = process.platform !== 'darwin';
-const USER_AGENT =
-  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36';
 const SYSTEM_COLOR =
   process.platform !== 'linux'
     ? `#${systemPreferences.getAccentColor().slice(0, 6)}`
@@ -30,6 +29,16 @@ const SYSTEM_COLOR =
 
 const STARTUP =
   process.platform !== 'linux' ? app.getLoginItemSettings().openAtLogin : false;
+
+let USER_AGENT =
+  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36';
+
+if (process.platform === 'win32')
+  USER_AGENT =
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36';
+if (process.platform === 'linux')
+  USER_AGENT =
+    'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36';
 
 global.CONSTS = {
   SIDEBAR_WIDTH,
@@ -41,6 +50,7 @@ global.CONSTS = {
   SYSTEM_COLOR,
   MUTED: store.get(Apps.MUTE_KEY) || 'on',
   STARTUP,
+  USER_AGENT,
 };
 
 let mainWindow;
@@ -52,6 +62,15 @@ const ABOUT_SIZE = {
   width: 300,
   height: 500,
 };
+
+log.info({
+  VERSION,
+  USER_AGENT,
+  CACHE: app.getPath('cache'),
+  LOGS: app.getPath('logs'),
+  APPDATA: app.getPath('appData'),
+  USERDATA: app.getPath('userData'),
+});
 
 function createAbout() {
   aboutWindow = new BrowserWindow({

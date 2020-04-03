@@ -97,12 +97,14 @@
   #titlebar {
     grid-column: 1 / span 2;
     grid-row: 1 / span 1;
+    height: 100%;
   }
 
   #placeholder {
     background: var(--content-background);
     grid-column: 2 / span 1;
     grid-row: 2 / span 1;
+    height: 100%;
   }
 </style>
 
@@ -126,9 +128,7 @@
   </div>
   <div id="placeholder">
     {#if activeId === ADD_ID}
-      <Create
-        {onCreate}
-        predefinedApps={PRED_APPS.filter(a => !urls.find(u => u.url === a.url))} />
+      <Create {onCreate} predefinedApps={PRED_APPS} />
     {:else}
       <PagePlaceholder activeUrl={urls.find(u => u.id === activeId)} />
     {/if}
