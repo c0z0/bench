@@ -48,7 +48,7 @@
 
 <style>
   .wrapper {
-    width: 100%;
+    width: calc(100% - 1px);
     height: calc(100% - 4rem);
     background: var(--background);
     border-right: var(--border-color) 1px solid;
