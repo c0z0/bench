@@ -2,6 +2,7 @@ name: Deploy bench website
 on:
   push:
     branches: [master]
+    paths: [packages/www/**, .github/**]
 
 jobs:
   deploy:
