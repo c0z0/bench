@@ -9,10 +9,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 13.x
+      - name: Install Packages
+        run: yarn --cwd packages/www install
+      - name: Build site
+        run: yarn --cwd packages/www export 
       - uses: amondnet/now-deployment@v2
         with:
           zeit-token: ${{ secrets.ZEIT_TOKEN }}
           now-args: '--prod'
-          working-directory: 'packages/www'
+          working-directory: 'packages/www/__sapper__/export'
           now-org-id: ${{ secrets.ORG_ID}}
           now-project-id: ${{ secrets.PROJECT_ID}}  
