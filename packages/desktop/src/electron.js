@@ -27,8 +27,7 @@ const SYSTEM_COLOR =
     ? `#${systemPreferences.getAccentColor().slice(0, 6)}`
     : false;
 
-const STARTUP =
-  process.platform !== 'linux' ? app.getLoginItemSettings().openAtLogin : false;
+const STARTUP_SUPPORTED = process.platform !== 'linux';
 
 let USER_AGENT =
   'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36';
@@ -49,7 +48,10 @@ global.CONSTS = {
   VERSION,
   SYSTEM_COLOR,
   MUTED: store.get(Apps.MUTE_KEY) || 'on',
-  STARTUP,
+  NOTIFICATIONS: store.has(Apps.NOTIFICATIONS_KEY)
+    ? store.get(Apps.NOTIFICATIONS_KEY)
+    : true,
+  STARTUP_SUPPORTED,
   USER_AGENT,
 };
 
@@ -142,6 +144,8 @@ function createWindow() {
   });
 
   apps = new Apps(mainWindow, store, global.CONSTS);
+
+  global.apps = apps;
 
   mainWindow.loadURL(`file://${path.join(__dirname, '../public/index.html')}`);
 

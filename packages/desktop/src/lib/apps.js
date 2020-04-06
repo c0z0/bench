@@ -1,10 +1,12 @@
-const { BrowserView, BrowserWindow } = require('electron');
+const { BrowserView, BrowserWindow, app } = require('electron');
+const path = require('path');
 const uniqid = require('uniqid');
 const urlModule = require('url');
 
 module.exports = class Apps {
   static STORE_KEY = 'urls';
   static MUTE_KEY = 'mute';
+  static NOTIFICATIONS_KEY = 'notifs';
 
   constructor(win, store, consts) {
     this.win = win;
@@ -15,6 +17,7 @@ module.exports = class Apps {
     this.store = store;
     this.STORE_KEY = Apps.STORE_KEY;
     this.MUTE_KEY = Apps.MUTE_KEY;
+    this.NOTIFICATIONS_KEY = Apps.NOTIFICATIONS_KEY;
 
     const urls = this.getApps();
 
@@ -44,6 +47,12 @@ module.exports = class Apps {
     } else if (muted === 'blur') {
       this.toggleMute(!BrowserWindow.getFocusedWindow() && true);
     }
+  }
+
+  openAtLogin() {
+    return process.platform !== 'linux'
+      ? app.getLoginItemSettings().openAtLogin
+      : false;
   }
 
   toggleMute(muted) {
@@ -87,8 +96,15 @@ module.exports = class Apps {
         plugins: true,
         partition: `persist:${id}`,
         userAgent: this.consts.USER_AGENT,
+        preload: path.join(__dirname, 'preload.js'),
       },
       backgroundColor: '#333',
+    });
+
+    view.webContents.session.cookies.set({
+      url: 'https://bench.cserdean.com',
+      name: 'BENCH_ID',
+      value: id,
     });
 
     view.webContents.loadURL(url, { userAgent: this.consts.USER_AGENT });
@@ -106,13 +122,28 @@ module.exports = class Apps {
     view.webContents.on('did-navigate', this.updateUrl(id));
     view.webContents.on('new-window', handleRedirect);
 
-    this.views.push({ view, id });
+    this.views.push({
+      view,
+      id,
+    });
 
     this.changeMute();
   }
 
+  toggleDevTools(view) {
+    if (
+      this.focusedViewId &&
+      this.getApp(this.focusedViewId).view.webContents.isDevToolsOpened()
+    )
+      this.getApp(
+        this.focusedViewId,
+      ).view.webContents.webContents.closeDevTools();
+
+    view.webContents.openDevTools();
+  }
+
   focusView(id) {
-    const { view } = this.getView(id);
+    const { view } = this.getApp(id);
 
     this.win.setBrowserView(view);
 
@@ -137,31 +168,45 @@ module.exports = class Apps {
   hideView() {
     if (this.focusedViewId === null) return;
 
-    this.win.removeBrowserView(this.getView(this.focusedViewId).view);
+    this.win.removeBrowserView(this.getApp(this.focusedViewId).view);
 
     this.focusedViewId = null;
   }
 
-  getView(id) {
+  getApp(id) {
     return this.views.find(v => v.id === id);
   }
 
   refresh(id) {
-    const { view } = this.getView(id);
+    const { view } = this.getApp(id);
 
     view.webContents.reload();
   }
 
   forward(id) {
-    const { view } = this.getView(id);
+    const { view } = this.getApp(id);
 
     if (view.webContents.canGoForward()) view.webContents.goForward();
   }
 
   backward(id) {
-    const { view } = this.getView(id);
+    const { view } = this.getApp(id);
 
     if (view.webContents.canGoBack()) view.webContents.goBack();
+  }
+
+  allowNotifications(id) {
+    if (!this.store.has(this.NOTIFICATIONS_KEY)) return true;
+    return this.store.get(this.NOTIFICATIONS_KEY);
+  }
+
+  toggleNotifications(id) {
+    if (!id) {
+      const allowNotifications = !this.allowNotifications();
+      this.store.set(this.NOTIFICATIONS_KEY, allowNotifications);
+
+      return;
+    }
   }
 
   updateApps(apps) {

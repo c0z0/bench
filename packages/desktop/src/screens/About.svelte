@@ -11,7 +11,8 @@
   import VolumeMed from "../icons/volumeMed.svg";
   import Toggle from "../components/Toggle.svelte";
 
-  const { VERSION, MUTED, STARTUP } = remote.getGlobal("CONSTS");
+  const { VERSION, MUTED, STARTUP_SUPPORTED } = remote.getGlobal("CONSTS");
+  const mainApps = remote.getGlobal("apps");
 
   export let colors;
   export let activeColor;
@@ -20,17 +21,24 @@
   export let themeSetting;
   export let systemColor;
 
-  let startup = STARTUP;
-  let mute = MUTED.toString();
+  let startup = mainApps.openAtLogin();
+  let allowNotifications = mainApps.allowNotifications();
+  let mute = mainApps.isMuted();
 
   const onMuteChange = e => {
     mute = e.target.value;
     ipc.send("mute", mute);
   };
 
-  const onStartupChange = e => {
+  const onStartupChange = () => {
     startup = !startup;
     ipc.send("startup", startup);
+  };
+
+  const onNotificationsChange = () => {
+    allowNotifications = !allowNotifications;
+
+    mainApps.toggleNotifications();
   };
 </script>
 
@@ -137,16 +145,17 @@
     margin-top: 0.5rem;
     margin-bottom: 0.75rem;
     display: flex;
-    flex-direction: row;
-    justify-content: center;
+    flex-direction: row-reverse;
+    justify-content: space-between;
     align-items: center;
     color: var(--icon-foreground);
     cursor: pointer;
+
+    width: 13rem;
   }
 
   .toggle-wrapper span {
     pointer-events: none;
-    margin-left: 1rem;
     transition: color 0.2s;
   }
 
@@ -206,13 +215,23 @@
   </div>
   <div
     class="toggle-wrapper"
-    on:click={onStartupChange}
-    class:checked={startup}>
-    <Toggle checked={startup} />
-    <span>Open at startup</span>
+    on:click={onNotificationsChange}
+    class:checked={allowNotifications}>
+    <Toggle checked={allowNotifications} />
+    <span>Allow notifications</span>
   </div>
-  <a href="https://cserdean.com" rel="noopener noreferrer" target="_blank">
-    Built by cserdean.com
-  </a>
-  <p>Version {VERSION}</p>
+
+  {#if STARTUP_SUPPORTED}
+    <div
+      class="toggle-wrapper"
+      on:click={onStartupChange}
+      class:checked={startup}>
+      <Toggle checked={startup} />
+      <span>Open at startup</span>
+    </div>
+    <a href="https://cserdean.com" rel="noopener noreferrer" target="_blank">
+      Built by cserdean.com
+    </a>
+    <p>Version {VERSION}</p>
+  {/if}
 </main>
