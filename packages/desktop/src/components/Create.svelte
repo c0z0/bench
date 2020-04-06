@@ -99,7 +99,7 @@
   }
 
   input {
-    padding: 1rem 2rem;
+    padding: 0.75rem 2rem;
     margin-bottom: 1rem;
     font-size: 1rem;
     background: var(--background);
@@ -114,9 +114,13 @@
   }
 
   input#submit {
-    background: var(--primary);
+    background: var(--foreground);
+    padding: 0;
+    text-align: center;
+    min-width: 140px;
     cursor: pointer;
-    color: white;
+    color: var(--background);
+    height: 40px;
   }
 
   .chevron {
