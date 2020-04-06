@@ -262,7 +262,7 @@
       <h2>your new workspace</h2>
       <div class="tilt img-wrapper-mobile">
         <img
-          src="/screenshot-v0.1.2.png"
+          src="/screenshot-v1.0.0.png"
           alt="screenshot"
           class="screenshot-mobile" />
       </div>
@@ -303,7 +303,7 @@
       <a href="https://cserdean.com" class="by">Built by cserdean.com</a>
     </div>
     <div class="img-wrapper tilt">
-      <img src="/screenshot-v0.1.2.png" alt="Screenshot" class="screenshot" />
+      <img src="/screenshot-v1.0.0.png" alt="Screenshot" class="screenshot" />
     </div>
   </div>
   <svg viewBox="0 0 100 100" class="sc-kgoBCf iQWuJD">
