@@ -4,6 +4,8 @@
 	</a>
 </h1>
 
+![Deploy bench website](https://github.com/c0z0/bench/workflows/Deploy%20bench%20website/badge.svg) ![Build/release](https://github.com/c0z0/bench/workflows/Build/release/badge.svg)
+
 # bench
 Simple electron app for communication services
 
